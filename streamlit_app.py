@@ -5,7 +5,7 @@ from PIL import Image
 import streamlit as st
 
 # Load the model
-model_path = 'classifier.h5'
+model_path = 'class_model.h5'
 
 try:
     model = load_model(model_path)
