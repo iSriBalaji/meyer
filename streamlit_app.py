@@ -1,12 +1,33 @@
+import os
+import kaggle
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 import numpy as np
 from PIL import Image
 import streamlit as st
 
-# Load the model
-model_path = 'class_model.h5'
+# Download the model from Kaggle (ensure you have Kaggle API credentials setup)
+def download_model():
+    model_dir = 'meyer_classifier_model'
+    
+    if not os.path.exists(model_dir):
+        os.makedirs(model_dir)
+    
+    # Download the model using the Kaggle API
+    try:
+        kaggle.api.model_download("isribalaji/meyer_classifier", path=model_dir)
+        print("Model downloaded successfully.")
+    except Exception as e:
+        print(f"Error downloading the model: {e}")
 
+# Define the model path after download
+model_path = os.path.join('meyer_classifier_model', 'meyer_classifier_model.h5')
+
+# Download the model from Kaggle if it's not already downloaded
+if not os.path.exists(model_path):
+    download_model()
+
+# Load the model
 try:
     model = load_model(model_path)
     print("Model loaded successfully.")
