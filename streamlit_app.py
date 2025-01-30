@@ -1,40 +1,17 @@
-import streamlit as st
 import tensorflow as tf
-import requests
-import os
-from io import BytesIO
-from PIL import Image
+from tensorflow.keras.models import load_model
 import numpy as np
+from PIL import Image
+import streamlit as st
 
-# Fetch URL from secrets for security
-# url = st.secrets['DRIVE_URL']  # The URL is now fetched from secrets
-
-# Modify the URL for direct download from Google Drive
-file_id = '1MDkq7qxw4Kj7_ResPR9XcgyRNrFjRLYU'  # Replace with your actual file ID
-url = f'https://drive.google.com/uc?export=download&id={file_id}'
-
-# Send a request to the URL and download the model
-response = requests.get(url)
-
-# Save the downloaded content as a .h5 file
+# Load the model
 model_path = 'classifier_model.h5'
 
-# Ensure the file was downloaded correctly
-if response.status_code == 200:
-    with open(model_path, 'wb') as file:
-        file.write(response.content)
-else:
-    st.error(f"Failed to download the model, status code: {response.status_code}")
-
-# Check if model file exists
-if not os.path.exists(model_path):
-    st.error(f"Model file does not exist at path: {model_path}")
-else:
-    # Load the model into TensorFlow
-    try:
-        model = tf.keras.models.load_model(model_path)
-    except Exception as e:
-        st.error(f"Error loading model: {e}")
+try:
+    model = load_model(model_path)
+    print("Model loaded successfully.")
+except Exception as e:
+    print(f"Error loading the model: {e}")
 
 # Define a function for image classification
 def classify_image(image):
@@ -46,7 +23,7 @@ def classify_image(image):
     # Make prediction
     predictions = model.predict(image)
     class_idx = np.argmax(predictions)  # Get the index of the highest prediction
-    class_names = ['Class 1', 'Class 2', 'Class 3']  # Replace with your actual class names
+    class_names = model.class_names  # Retrieve class names directly from the model
     predicted_class = class_names[class_idx]
     return predicted_class
 
