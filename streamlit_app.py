@@ -10,7 +10,9 @@ import numpy as np
 
 # Use the DRIVE_URL from st.secrets
 # url = st.secrets['DRIVE_URL']  # The URL is now fetched from secrets
-url = "https://drive.google.com/file/d/1MDkq7qxw4Kj7_ResPR9XcgyRNrFjRLYU/view?usp=drive_link"
+# Modify the URL for direct download from Google Drive
+file_id = '1MDkq7qxw4Kj7_ResPR9XcgyRNrFjRLYU'  # Replace with your actual file ID
+url = f'https://drive.google.com/uc?export=download&id={file_id}'
 
 # Send a request to the URL and download the model
 response = requests.get(url)
