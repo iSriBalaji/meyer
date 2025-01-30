@@ -3,18 +3,29 @@ import streamlit as st
 # pip.main(['install','tensorflow'])
 import tensorflow as tf
 import requests
+import os
 from io import BytesIO
 from PIL import Image
 import numpy as np
 
 # Use the DRIVE_URL from st.secrets
-url = st.secrets['DRIVE_URL']  # The URL is now fetched from secrets
+# url = st.secrets['DRIVE_URL']  # The URL is now fetched from secrets
+url = "https://drive.google.com/file/d/1MDkq7qxw4Kj7_ResPR9XcgyRNrFjRLYU/view?usp=drive_link"
 
 # Send a request to the URL and download the model
 response = requests.get(url)
 
 # Save the downloaded content as a .h5 file
 model_path = 'classifier_model.h5'
+
+import os
+
+model_path = 'classifier_model.h5'
+if not os.path.exists(model_path):
+    print(f"Model file does not exist at path: {model_path}")
+else:
+    print(f"Model file exists at path: {model_path}")
+
 with open(model_path, 'wb') as file:
     file.write(response.content)
 
